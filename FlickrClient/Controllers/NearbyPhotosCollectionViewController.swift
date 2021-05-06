@@ -12,9 +12,10 @@ private let reuseIdentifier = "NearbyPhotoCell"
 
 class NearbyPhotosCollectionViewController: UICollectionViewController {
     
+    var photoURLs: [URL?]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
@@ -24,6 +25,18 @@ class NearbyPhotosCollectionViewController: UICollectionViewController {
         // Do any additional setup after loading the view.
     }
     
+    func fetchImages() {
+        QueryService.getExprole(sender: self) { (urls, error) in
+            if error == nil {
+                guard let URLs = urls else { return }
+                self.photoURLs = [URL]()
+                self.photoURLs = URLs
+                self.collectionView.reloadData()
+            } else {
+                print("Error: \(String(describing: error))")
+            }
+        }
+    }
     /*
      // MARK: - Navigation
      
@@ -55,37 +68,6 @@ class NearbyPhotosCollectionViewController: UICollectionViewController {
         return cell
     }
     
-    func downloadTestPhoto() {
-        let flickrInteresting = FKFlickrInterestingnessGetList()
-        
-        flickrInteresting.per_page = "15"
-        //        FlickrKit.sharedFlickrKit().call(flickrInteresting) { (response, error) -> Void in
-        //                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        //                    if (response != nil) {
-        //                            // Pull out the photo urls from the results
-        //                            let topPhotos = response["photos"] as! [NSObject: AnyObject]
-        //                            let photoArray = topPhotos["photo"] as! [[NSObject: AnyObject]]
-        //                            for photoDictionary in photoArray {
-        //                                let photoURL = FlickrKit.sharedFlickrKit().photoURLForSize(FKPhotoSizeSmall240, fromPhotoDictionary: photoDictionary)
-        //                                self.photoURLs.append(photoURL)
-        //                            }
-        //                        }
-        //               })
-        //        }
-        DispatchQueue.global().async {
-            FlickrKit.shared().call(flickrInteresting) { (response, error) -> Void in
-                if (response != nil) {
-                    let topPhotos = response!["photos"] as! [NSObject: AnyObject]
-                    let photoArray = topPhotos["photo"] as! [[NSObject: AnyObject]]
-                    for photoDictionary in photoArray {
-                        let photoURL = FlickrKit.shared().photoURLForSize(FKPhotoSize, fromPhotoDictionary: photoDictionary)
-                        self.photoURLs.append(photoURL)
-                        
-                    }
-                }
-                
-            }
-        }
         
         // MARK: UICollectionViewDelegate
         

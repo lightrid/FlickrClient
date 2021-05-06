@@ -50,14 +50,10 @@ class QueryService {
                         default:
                             break;
                         }
-                        
-
-                         completionHandler(nil,error)
+                        completionHandler(nil,error)
+                    }
                 }
-                
             }
-            
         }
     }
-}
 }
