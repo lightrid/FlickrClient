@@ -14,7 +14,7 @@
         <scene sceneID="XL9-Oj-CsH">
             <objects>
                 <collectionViewController id="kEy-Ex-SAp" customClass="NearbyPhotosCollectionViewController" customModule="FlickrClient" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="hbL-qi-bWS">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" id="hbL-qi-bWS">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -32,7 +32,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vbW-Z3-Gwh">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vbW-Z3-Gwh">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         </imageView>
                                     </subviews>
@@ -127,6 +127,17 @@
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="r5L-AC-Cn2">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1WU-WX-INp">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="1WU-WX-INp" secondAttribute="bottom" id="IJI-05-EGD"/>
+                                                <constraint firstAttribute="trailing" secondItem="1WU-WX-INp" secondAttribute="trailing" id="Ivc-o6-m3e"/>
+                                                <constraint firstItem="1WU-WX-INp" firstAttribute="leading" secondItem="r5L-AC-Cn2" secondAttribute="leading" id="R6W-fB-SJd"/>
+                                                <constraint firstItem="1WU-WX-INp" firstAttribute="top" secondItem="r5L-AC-Cn2" secondAttribute="top" id="aUl-YF-HSg"/>
+                                            </constraints>
                                         </collectionViewCellContentView>
                                     </collectionViewCell>
                                 </cells>
@@ -146,6 +157,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Photo Search" id="a0P-dX-3eR"/>
                     <connections>
+                        <outlet property="collectionView" destination="Pdk-hm-TbT" id="NWI-oQ-4Ez"/>
                         <segue destination="C7l-2y-mfv" kind="show" identifier="DetailPhotoSearchSegue" id="qhx-ko-VdT"/>
                     </connections>
                 </viewController>

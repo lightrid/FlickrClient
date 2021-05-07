@@ -9,12 +9,33 @@ import UIKit
 
 class PhotoSearchViewController: UIViewController {
 
+    let identifier = "PhotoSearchCell"
+    var photoURLs: [URL?]?
+    
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+   
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.fetchImages()
         // Do any additional setup after loading the view.
     }
-    
+     
+    func fetchImages() {
+       QueryService.getExprole(sender: self) { (urls, error) in
+           if error == nil {
+               guard let URLs = urls else { return }
+               self.photoURLs = [URL]()
+               self.photoURLs = URLs
+               self.collectionView.reloadData()
+           } else {
+              
+               print("Error: \(String(describing: error))")
+           }
+       }
+   }
 
     /*
     // MARK: - Navigation

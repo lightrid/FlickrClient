@@ -27,16 +27,14 @@ class QueryService {
         
         var photoURLs = [URL?]()
         let flickrInteresting = FKFlickrInterestingnessGetList()
-        flickrInteresting.per_page = "30"
-        FlickrKit.shared().call(flickrInteresting)
-        
+        flickrInteresting.per_page = "130"
         FlickrKit.shared().call(flickrInteresting) { (response, error) -> Void in
             
-            DispatchQueue.global().async {
+            DispatchQueue.main.async {
                 if let response = response, let photoArray = FlickrKit.shared().photoArray(fromResponse: response) {
                     
                     for photoDictionary in photoArray {
-                        let photoURL = FlickrKit.shared().photoURL(for: .small240, fromPhotoDictionary: photoDictionary)
+                        let photoURL = FlickrKit.shared().photoURL(for: .small320, fromPhotoDictionary: photoDictionary)
                         photoURLs.append(photoURL)
                     }
                     completionHandler(photoURLs, nil)

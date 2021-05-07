@@ -103,8 +103,6 @@
 		B753CF8F2642FFBE0057F0F1 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				B753CF7D2642F15F0057F0F1 /* Main.storyboard */,
-				B753CF822642F1630057F0F1 /* LaunchScreen.storyboard */,
 				B75E29BC2644813A002E339D /* NearbyPhotoCell.swift */,
 			);
 			path = View;
@@ -139,6 +137,8 @@
 		B753CF93264300490057F0F1 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B753CF7D2642F15F0057F0F1 /* Main.storyboard */,
+				B753CF822642F1630057F0F1 /* LaunchScreen.storyboard */,
 				B753CF772642F15F0057F0F1 /* AppDelegate.swift */,
 				B753CF792642F15F0057F0F1 /* SceneDelegate.swift */,
 				B753CF852642F1630057F0F1 /* Info.plist */,

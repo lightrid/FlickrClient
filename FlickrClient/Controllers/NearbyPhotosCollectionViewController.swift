@@ -8,6 +8,7 @@
 import UIKit
 import FlickrKit
 
+
 private let reuseIdentifier = "NearbyPhotoCell"
 
 class NearbyPhotosCollectionViewController: UICollectionViewController {
@@ -18,14 +19,16 @@ class NearbyPhotosCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-        
-        // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        
+      let refreshContrlol = UIRefreshControl()
+        refreshContrlol.addTarget(self, action: #selector(self.fetchImages), for: .valueChanged)
+//        // Register cell classes
+       self.collectionView.addSubview(refreshContrlol)
+//        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        fetchImages()
         // Do any additional setup after loading the view.
     }
     
-    func fetchImages() {
+    @objc func fetchImages() {
         QueryService.getExprole(sender: self) { (urls, error) in
             if error == nil {
                 guard let URLs = urls else { return }
@@ -33,6 +36,7 @@ class NearbyPhotosCollectionViewController: UICollectionViewController {
                 self.photoURLs = URLs
                 self.collectionView.reloadData()
             } else {
+               
                 print("Error: \(String(describing: error))")
             }
         }
@@ -49,21 +53,22 @@ class NearbyPhotosCollectionViewController: UICollectionViewController {
     
     // MARK: UICollectionViewDataSource
     
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
+//    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        // #warning Incomplete implementation, return the number of sections
+//        return 3
+//    }
     
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        return photoURLs?.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         
-        // Configure the cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NearbyPhotoCell.identifier, for: indexPath) as! NearbyPhotoCell
+        
+       
+        cell.photoURL = self.photoURLs?[indexPath.row]
         
         return cell
     }
@@ -71,6 +76,10 @@ class NearbyPhotosCollectionViewController: UICollectionViewController {
         
         // MARK: UICollectionViewDelegate
         
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let width = UIScreen.main.bounds.width / 3
+//        return CGSize(width: width - 1, height: width - 1)
+//    }
         /*
          // Uncomment this method to specify if the specified item should be highlighted during tracking
          override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
