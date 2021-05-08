@@ -19,6 +19,7 @@
 		B753CFB3264308940057F0F1 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B753CFB2264308940057F0F1 /* Photo.swift */; };
 		B753CFB62643175E0057F0F1 /* QueryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B753CFB52643175E0057F0F1 /* QueryService.swift */; };
 		B75E29BD2644813A002E339D /* NearbyPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75E29BC2644813A002E339D /* NearbyPhotoCell.swift */; };
+		B7A23A252645E9FD000AA688 /* PhotoSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A23A242645E9FD000AA688 /* PhotoSearchCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		B753CFB2264308940057F0F1 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		B753CFB52643175E0057F0F1 /* QueryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryService.swift; sourceTree = "<group>"; };
 		B75E29BC2644813A002E339D /* NearbyPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyPhotoCell.swift; sourceTree = "<group>"; };
+		B7A23A242645E9FD000AA688 /* PhotoSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSearchCell.swift; sourceTree = "<group>"; };
 		DCAB05EB21572A5C958CF47F /* Pods-FlickrClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlickrClient.release.xcconfig"; path = "Target Support Files/Pods-FlickrClient/Pods-FlickrClient.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				B75E29BC2644813A002E339D /* NearbyPhotoCell.swift */,
+				B7A23A242645E9FD000AA688 /* PhotoSearchCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				B753CFB3264308940057F0F1 /* Photo.swift in Sources */,
 				B753CF782642F15F0057F0F1 /* AppDelegate.swift in Sources */,
 				B753CFAD264305F20057F0F1 /* PhotoSearchViewController.swift in Sources */,
+				B7A23A252645E9FD000AA688 /* PhotoSearchCell.swift in Sources */,
 				B75E29BD2644813A002E339D /* NearbyPhotoCell.swift in Sources */,
 				B753CFB0264307420057F0F1 /* DetailViewController.swift in Sources */,
 				B753CFB62643175E0057F0F1 /* QueryService.swift in Sources */,
