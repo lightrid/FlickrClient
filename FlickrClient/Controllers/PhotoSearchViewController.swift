@@ -66,7 +66,7 @@ class PhotoSearchViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row >= (photoURLs?.count ?? 10) - 10 {
-            fetchImages()
+          //  fetchImages()
         }
     }
     /*

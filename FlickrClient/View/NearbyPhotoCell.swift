@@ -15,15 +15,8 @@ class NearbyPhotoCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
     
-    var photoURL: URL? {
-        didSet {
-            DispatchQueue.global().async {
-                guard let imageUrl = self.photoURL else {return}
-                guard let imageData = try? Data(contentsOf: imageUrl) else { return}
-                DispatchQueue.main.async {
-                    self.imageView.image = UIImage(data: imageData)
-                }
-            }
-        }
+    func updateCell(image: UIImage) {
+        imageView.image = image
     }
 }
+

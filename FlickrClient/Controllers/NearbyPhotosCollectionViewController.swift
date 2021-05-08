@@ -8,31 +8,23 @@
 import UIKit
 import FlickrKit
 
-class FlickrItem {
+struct FlickrItem {
     var URL: URL
-    var photoData: Data? {
-        didSet {
-            if let imageData = try? Data(contentsOf: self.URL) {
-                DispatchQueue.main.async {
-                    self.photoData = imageData
-                }
-            } else {
-                
-                    
-                
-            }
-        }
-    }
-    
+     var photoData: Data?
+    var image: UIImage?
     
     init(url: URL) {
         URL = url
     }
-    //     func getPhoto(_ completion: @escaping() -> Data) {
-    //        if let data = try? Data(contentsOf: URL) {
-    //           completion
-    //        }
-    //    }
+    func getPhoto(_ completion: @escaping(_ data: Data) -> ()) {
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: URL) {
+                DispatchQueue.main.async {
+                    completion(data)
+                }
+            }
+        }
+    }
     //    mutating func getPhoto() -> Data? {
     //       if let data = try? Data(contentsOf: URL) {
     //        photoData = data
@@ -40,21 +32,21 @@ class FlickrItem {
     //       }
     //        return nil
     //   }
-    func getPhoto(_ completion: @escaping(_ data: Data) -> ()) {
-        DispatchQueue.global().async {
-            guard let imageData = try? Data(contentsOf: self.URL) else { return}
-            DispatchQueue.main.async {
-                completion(imageData)
-            }
-        }
-    }
+    //    func getPhoto(_ completion: @escaping(_ data: Data) -> ()) {
+    //        DispatchQueue.global().async {
+    //            guard let imageData = try? Data(contentsOf: self.URL) else { return}
+    //            DispatchQueue.main.async {
+    //                completion(imageData)
+    //            }
+    //        }
+    //    }
 }
 
 private let reuseIdentifier = "NearbyPhotoCell"
 
 class NearbyPhotosCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
-    private var photoURLs: [URL?]?
+    
     private var flickrItemArray = [FlickrItem]()
     
     override func viewDidLoad() {
@@ -63,21 +55,22 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
         collectionView.dataSource = self
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-        let refreshContrlol = UIRefreshControl()
-        refreshContrlol.addTarget(self, action: #selector(self.fetchImages), for: .valueChanged)
-        //        // Register cell classes
-        self.collectionView.addSubview(refreshContrlol)
+//        let refreshContrlol = UIRefreshControl()
+//        refreshContrlol.addTarget(self, action: #selector(self.fetchImages), for: .valueChanged)
+//        //        // Register cell classes
+//        self.collectionView.addSubview(refreshContrlol)
         //        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         fetchImages()
         // Do any additional setup after loading the view.
     }
     
-    @objc func fetchImages() {
+     func fetchImages() {
         QueryService.getNearbyURLs(flickrItemArray.count) { [weak self] (urls, error) in
             guard let self = self else {return}
             
             if error == nil {
                 guard let URLs = urls else { return }
+                //flickrItemArray.append(contentsOf: FlickrItem(url: URLs))
                 for url in URLs{
                     let item = FlickrItem(url: url!)
                     self.flickrItemArray.append(item)
@@ -113,19 +106,19 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
     
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photoURLs?.count ?? 0
+        return flickrItemArray.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NearbyPhotoCell.identifier, for: indexPath) as? NearbyPhotoCell{
-            
-            //            self.flickrItemArray[indexPath.row].getPhoto { (data) -> () in
-            //                cell.imageView.image = UIImage(data: data)
-            //            }
-            
-            if let imageData = flickrItemArray[indexPath.row].photoData {
-                cell.imageView.image = UIImage(data: imageData)
+        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NearbyPhotoCell.identifier,
+                                                          for: indexPath) as? NearbyPhotoCell{
+            if let data = flickrItemArray[indexPath.row].photoData  {
+                cell.updateCell(image: <#T##UIImage#>)
+            } else {
+            self.flickrItemArray[indexPath.row].getPhoto { (data) -> () in
+                cell.imageData = data
+            }
             }
             return cell
         }
@@ -134,19 +127,19 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row >= flickrItemArray.count - 10 {
+        if indexPath.row >= flickrItemArray.count - 30 {
+            fetchImages()
         }
     }
     // MARK: UICollectionViewDelegate
-    //    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-    //            let screenSize: CGRect = UIScreen.main.bounds
-    //            let screenWidth = screenSize.width
-    //            return CGSize(width: (screenWidth/3)-6, height: (screenWidth/3)-6);
-    //
-    //        }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = UIScreen.main.bounds.width / 3
         return CGSize(width: width - 1, height: width - 1)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return CGFloat(1)
+        
     }
 }
 

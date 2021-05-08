@@ -26,9 +26,14 @@ class QueryService {
     class func getNearbyURLs(_ currentItemCount: Int, completionHandler: @escaping (_ photoURLs: [URL?]?, _ error: NSError?) -> ()) {
         
         var photoURLs = [URL?]()
-        let flickrInteresting = FKFlickrInterestingnessGetList()
-        flickrInteresting.per_page = String(currentItemCount + 30)
-        FlickrKit.shared().call(flickrInteresting) { (response, error) -> Void in
+        let flickrSearchParameters = FKFlickrPhotosSearch()
+        
+        flickrSearchParameters.lat = "49.839684" // потрібно отримати локацію
+        flickrSearchParameters.lon = "24.029716"
+        flickrSearchParameters.radius = "1"
+        flickrSearchParameters.per_page = "30" //String(currentItemCount + 30)
+        flickrSearchParameters.page = String(currentItemCount/30 + 1)
+        FlickrKit.shared().call(flickrSearchParameters) { (response, error) -> Void in
             
             DispatchQueue.main.async {
                 if let response = response, let photoArray = FlickrKit.shared().photoArray(fromResponse: response) {
@@ -57,10 +62,11 @@ class QueryService {
     class func getSearchURLs(_ currentItemCount: Int, completionHandler: @escaping (_ photoURLs: [URL?]?, _ error: NSError?) -> Void) {
         
         var photoURLs = [URL?]()
-        let flickrInteresting = FKFlickrPhotosSearch()
-        flickrInteresting.per_page = String(currentItemCount + 30)
-        flickrInteresting.text = "Lviv"
-        FlickrKit.shared().call(flickrInteresting) { (response, error) -> Void in
+        let flickrSearchParameters = FKFlickrPhotosSearch()
+        //flickrInteresting.per_page = String(currentItemCount + 30)
+        flickrSearchParameters.page = "1"
+        flickrSearchParameters.text = "Lviv" // потрібно отримати текстовий запит
+        FlickrKit.shared().call(flickrSearchParameters) { (response, error) -> Void in
             
             DispatchQueue.main.async {
                 if let response = response, let photoArray = FlickrKit.shared().photoArray(fromResponse: response) {
