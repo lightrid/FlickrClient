@@ -11,12 +11,21 @@ import UIKit
 
 class NearbyPhotoCell: UICollectionViewCell {
     
-    static let identifier = "NearbyPhotoCell"
-    
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    func updateCell(image: UIImage) {
-        imageView.image = image
+    public func update(_ data: Data?) {
+        if let data = data {
+            activityIndicator.stopAnimating()
+            activityIndicator.isHidden = true
+            imageView.isHidden = false
+            imageView.image = UIImage(data: data)
+        } else {
+            imageView.isHidden = true
+            activityIndicator.isHidden = false
+            activityIndicator.startAnimating()
+            // TODO: -Activity indicator
+        }
     }
 }
 

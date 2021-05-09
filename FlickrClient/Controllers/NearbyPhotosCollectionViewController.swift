@@ -8,129 +8,70 @@
 import UIKit
 import FlickrKit
 
-struct FlickrItem {
-    var URL: URL
-     var photoData: Data?
-    var image: UIImage?
-    
-    init(url: URL) {
-        URL = url
-    }
-    func getPhoto(_ completion: @escaping(_ data: Data) -> ()) {
-        DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: URL) {
-                DispatchQueue.main.async {
-                    completion(data)
-                }
-            }
-        }
-    }
-    //    mutating func getPhoto() -> Data? {
-    //       if let data = try? Data(contentsOf: URL) {
-    //        photoData = data
-    //         return data
-    //       }
-    //        return nil
-    //   }
-    //    func getPhoto(_ completion: @escaping(_ data: Data) -> ()) {
-    //        DispatchQueue.global().async {
-    //            guard let imageData = try? Data(contentsOf: self.URL) else { return}
-    //            DispatchQueue.main.async {
-    //                completion(imageData)
-    //            }
-    //        }
-    //    }
-}
-
-private let reuseIdentifier = "NearbyPhotoCell"
-
 class NearbyPhotosCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
-    
     private var flickrItemArray = [FlickrItem]()
+    private let reuseIdentifier = "NearbyPhotoCell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
         collectionView.dataSource = self
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-//        let refreshContrlol = UIRefreshControl()
-//        refreshContrlol.addTarget(self, action: #selector(self.fetchImages), for: .valueChanged)
-//        //        // Register cell classes
-//        self.collectionView.addSubview(refreshContrlol)
-        //        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         fetchImages()
-        // Do any additional setup after loading the view.
     }
     
-     func fetchImages() {
+    func fetchImages() {
         QueryService.getNearbyURLs(flickrItemArray.count) { [weak self] (urls, error) in
             guard let self = self else {return}
             
             if error == nil {
                 guard let URLs = urls else { return }
-                //flickrItemArray.append(contentsOf: FlickrItem(url: URLs))
+               
                 for url in URLs{
-                    let item = FlickrItem(url: url!)
-                    self.flickrItemArray.append(item)
-                    
+                    if let validURL = url {
+                        let item = FlickrItem(url: validURL)
+                        self.flickrItemArray.append(item)
+                    }
+                    self.collectionView.reloadData()
                 }
-                self.collectionView.reloadData()
             } else {
-                
                 print("Error: \(String(describing: error))")
             }
         }
     }
     
-    func urlToImage() {
-        
-    }
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using [segue destinationViewController].
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
-    // MARK: UICollectionViewDataSource
-    
-    //    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-    //        // #warning Incomplete implementation, return the number of sections
-    //        return 3
-    //    }
-    
-    
+
+
+    // MARK: - UICollectionViewDataSource
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return flickrItemArray.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NearbyPhotoCell.identifier,
+        print("init \(indexPath.row)")
+        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
                                                           for: indexPath) as? NearbyPhotoCell{
-            if let data = flickrItemArray[indexPath.row].photoData  {
-                cell.updateCell(image: <#T##UIImage#>)
-            } else {
-            self.flickrItemArray[indexPath.row].getPhoto { (data) -> () in
-                cell.imageData = data
-            }
+            self.flickrItemArray[indexPath.row].getPhoto {(data) -> () in
+                cell.update(data)
             }
             return cell
         }
         return UICollectionViewCell()
-        
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row >= flickrItemArray.count - 30 {
+        if indexPath.row >= flickrItemArray.count - 1  {
             fetchImages()
         }
     }
+    
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if flickrItemArray[indexPath.row].haveData() {
+            performSegue(withIdentifier: "DetailNearblyPhotoSegue", sender: indexPath)
+        }
+    }
+    
     // MARK: UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -141,7 +82,23 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
         return CGFloat(1)
         
     }
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+       if  segue.identifier == "DetailNearblyPhotoSegue" {
+           if let conroller = segue.destination as? DetailViewController {
+               if let indexPath = sender as? IndexPath {
+//                 flickrItemArray[indexPath.row].getPhoto({ (data) in
+//                    conroller.image = data
+//                })
+                conroller.image = flickrItemArray[indexPath.row]
+               }
+           }
+       }
+    }
+    
 }
+
 
 /*
  // Uncomment this method to specify if the specified item should be highlighted during tracking
