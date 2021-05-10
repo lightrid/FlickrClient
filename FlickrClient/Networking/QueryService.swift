@@ -7,20 +7,22 @@
 
 import Foundation
 import FlickrKit
-
+import CoreLocation
 
 struct QueryService {
     
-    static func getURLsOfItems(_ currentItemCount: Int, completionHandler: @escaping (_ photoItems: [FlickrItem?]?, _ error: NSError?) -> ()) {
+    
+    //- TODO: Перевірка кількості URL (При ексклюзивному запиті перезаписує комірки)
+    static func getURLsOfItems(_ currentItemCount: Int,_ userLocation:  CLLocation, completionHandler: @escaping (_ photoItems: [FlickrItem?]?, _ error: NSError?) -> ()) {
         
         var photoItems = [FlickrItem?]()
         let flickrSearchParameters = FKFlickrPhotosSearch()
         
-        flickrSearchParameters.lat = "49.839684" // потрібно отримати локацію
-        flickrSearchParameters.lon = "24.029716"
+        flickrSearchParameters.lat = String(userLocation.coordinate.latitude)
+        flickrSearchParameters.lon = String(userLocation.coordinate.longitude)
         flickrSearchParameters.radius = "1"
         
-        flickrSearchParameters.per_page = "100" //String(currentItemCount + 30)
+        flickrSearchParameters.per_page = "100" 
         flickrSearchParameters.page = String(currentItemCount/100 + 1)
         print("NEW PAGE ON URLS:            \(flickrSearchParameters.page!)")
         FlickrKit.shared().call(flickrSearchParameters) { (response, error) -> Void in
@@ -61,7 +63,7 @@ struct QueryService {
         
         flickrSearchParameters.per_page = "100" //String(currentItemCount + 30)
         flickrSearchParameters.page = String(currentItemCount/100 + 1)
-        print("NEW PAGE ON URLS:            \(flickrSearchParameters.page!)")
+        print("NEW PAGE ON URLS:            \(flickrSearchParameters.page!) \(searchText)")
         FlickrKit.shared().call(flickrSearchParameters) { (response, error) -> Void in
             DispatchQueue.main.async {
                 if let response = response, let photoArray = FlickrKit.shared().photoArray(fromResponse: response) {

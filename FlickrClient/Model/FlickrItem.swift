@@ -20,7 +20,7 @@ class FlickrItem {
         self.photoURL = photoURL
         self.fullViewPhotoURL = fullViewPhotoURL
     }
-    
+    // TODO - Інколи URL є биті, потрібно ігнорувати їх. Скоріш за все потрібо cath блок до 36 рядка і видалити об'єкт з масиву.
     public func getPhoto(_ completion: @escaping(_ data: Data?) -> ()) {
         // Якщо маємо значення то повертаємо його одразу і перериваємо
         if let data = photoData {
