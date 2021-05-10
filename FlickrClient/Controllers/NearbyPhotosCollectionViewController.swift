@@ -21,7 +21,7 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
     }
     
     func fetchImages() {
-        QueryService.getNearbyURLs(flickrItemArray.count) { [weak self] (items, error) in
+        QueryService.getURLsOfItems(flickrItemArray.count) { [weak self] (items, error) in
             guard let self = self else {return}
             
             if error == nil {

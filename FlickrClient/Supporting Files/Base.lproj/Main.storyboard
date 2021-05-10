@@ -179,15 +179,21 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1WU-WX-INp">
                                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                                 </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="biu-Ho-E3n">
+                                                    <rect key="frame" x="54" y="54" width="20" height="20"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="1WU-WX-INp" secondAttribute="bottom" id="IJI-05-EGD"/>
                                                 <constraint firstAttribute="trailing" secondItem="1WU-WX-INp" secondAttribute="trailing" id="Ivc-o6-m3e"/>
                                                 <constraint firstItem="1WU-WX-INp" firstAttribute="leading" secondItem="r5L-AC-Cn2" secondAttribute="leading" id="R6W-fB-SJd"/>
                                                 <constraint firstItem="1WU-WX-INp" firstAttribute="top" secondItem="r5L-AC-Cn2" secondAttribute="top" id="aUl-YF-HSg"/>
+                                                <constraint firstItem="biu-Ho-E3n" firstAttribute="centerX" secondItem="r5L-AC-Cn2" secondAttribute="centerX" id="sWa-Uv-NLR"/>
+                                                <constraint firstItem="biu-Ho-E3n" firstAttribute="centerY" secondItem="r5L-AC-Cn2" secondAttribute="centerY" id="saQ-0l-ET3"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>
+                                            <outlet property="activityIndicator" destination="biu-Ho-E3n" id="ING-6I-OGr"/>
                                             <outlet property="imageView" destination="1WU-WX-INp" id="zUO-Bb-KL0"/>
                                         </connections>
                                     </collectionViewCell>
@@ -209,6 +215,7 @@
                     <navigationItem key="navigationItem" title="Photo Search" id="a0P-dX-3eR"/>
                     <connections>
                         <outlet property="collectionView" destination="Pdk-hm-TbT" id="NWI-oQ-4Ez"/>
+                        <outlet property="searchBar" destination="Tcu-kH-qdt" id="0l2-4s-gZJ"/>
                         <segue destination="C7l-2y-mfv" kind="show" identifier="DetailPhotoSearchSegue" id="qhx-ko-VdT"/>
                     </connections>
                 </viewController>
@@ -256,7 +263,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Mp8-h9-Mn0"/>
+        <segue reference="qhx-ko-VdT"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="location.fill" catalog="system" width="128" height="121"/>
