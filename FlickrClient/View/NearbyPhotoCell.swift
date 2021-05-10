@@ -24,7 +24,6 @@ class NearbyPhotoCell: UICollectionViewCell {
             imageView.isHidden = true
             activityIndicator.isHidden = false
             activityIndicator.startAnimating()
-            // TODO: -Activity indicator
         }
     }
 }

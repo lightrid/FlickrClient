@@ -11,70 +11,9 @@ import FlickrKit
 
 struct QueryService {
     
-    
-    static func getFullPhoto(_ url: URL?, completionHandler: @escaping (_ photoURL: URL?, _ error: NSError?) -> ()) {
-        guard let url = url else { return }
+    static func getNearbyURLs(_ currentItemCount: Int, completionHandler: @escaping (_ photoItems: [FlickrItem?]?, _ error: NSError?) -> ()) {
         
-        let flickrSearchParameters = FKFlickrPhotosSearch()
-        completionHandler(url, nil)
-        
-    }
-    
-    static func getPhotoDictionary(_ currentItemCount: Int, completionHandler: @escaping (_ photoDictionary: [[String: Any]?]?, _ error: NSError?) -> ()) {
-        
-        var photoDictionaryArray = [[String: Any]?]()
-        let flickrSearchParameters = FKFlickrPhotosSearch()
-        
-        flickrSearchParameters.lat = "49.839684" // потрібно отримати локацію
-        flickrSearchParameters.lon = "24.029716"
-        flickrSearchParameters.radius = "1"
-        
-        flickrSearchParameters.per_page = "100" //String(currentItemCount + 30)
-        flickrSearchParameters.page = String(currentItemCount/100 + 1)
-        
-        FlickrKit.shared().call(flickrSearchParameters) { (response, error) -> Void in
-            
-            DispatchQueue.main.async {
-                if let response = response, let photoArray = FlickrKit.shared().photoArray(fromResponse: response) {
-                    
-                    for item in photoArray {
-                        photoDictionaryArray.append(item)
-                    }
-                    completionHandler(photoDictionaryArray, nil)
-                    
-                } else {
-                    if let error = error as NSError? {
-                        
-                        switch error.code {
-                        case FKFlickrInterestingnessGetListError.serviceCurrentlyUnavailable.rawValue:
-                            break;
-                        default:
-                            break;
-                        }
-                        completionHandler(nil,error)
-                    }
-                }
-            }
-        }
-        
-    }
-    
-    static func getURLfromDictionary(_ photoDictionary: [[String: Any]?]?, completionHandler: @escaping (_ photoURLs: [URL?]?, _ error: NSError?) -> ()) {
-        
-    }
-    
-    static func getURL(_ photoDictionary: [[String: Any]]) -> [URL?]? {
-        var photoURSs = [URL?]()
-        for item in photoDictionary {
-            let photoURL = FlickrKit.shared().photoURL(for: .large1024, fromPhotoDictionary: item)
-            photoURSs.append(photoURL)
-        }
-        return photoURSs
-    }
-    
-    static func getNearbyURLs(_ currentItemCount: Int, completionHandler: @escaping (_ photoURLs: [URL?]?, _ error: NSError?) -> ()) {
-        
-        var photoURLs = [URL?]()
+        var photoItems = [FlickrItem?]()
         let flickrSearchParameters = FKFlickrPhotosSearch()
         
         flickrSearchParameters.lat = "49.839684" // потрібно отримати локацію
@@ -90,12 +29,12 @@ struct QueryService {
                 if let response = response, let photoArray = FlickrKit.shared().photoArray(fromResponse: response) {
                     
                     for photoDictionary in photoArray {
-                        
-                        let photoURL = FlickrKit.shared().photoURL(for: .large1024, fromPhotoDictionary: photoDictionary)
-                            
-                        photoURLs.append(photoURL)
+                        let photoURL = FlickrKit.shared().photoURL(for: .small320, fromPhotoDictionary: photoDictionary)
+                        let largePhotoURL = FlickrKit.shared().photoURL(for: .large1024, fromPhotoDictionary: photoDictionary)
+                        let photo = FlickrItem(photoURL: photoURL, fullViewPhotoURL: largePhotoURL)
+                        photoItems.append(photo)
                     }
-                    completionHandler(photoURLs, nil)
+                    completionHandler(photoItems, nil)
                     
                 } else {
                     if let error = error as NSError? {

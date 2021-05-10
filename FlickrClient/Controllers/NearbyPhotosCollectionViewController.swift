@@ -21,83 +21,105 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
     }
     
     func fetchImages() {
-        QueryService.getNearbyURLs(flickrItemArray.count) { [weak self] (urls, error) in
+        QueryService.getNearbyURLs(flickrItemArray.count) { [weak self] (items, error) in
             guard let self = self else {return}
             
             if error == nil {
-                guard let URLs = urls else { return }
-               
-                for url in URLs{
-                    if let validURL = url {
-                        let item = FlickrItem(url: validURL)
-                        self.flickrItemArray.append(item)
-                    }
+                guard let items = items else { return }
+                for oneItem in items {
+                    guard let value = oneItem else { return }
+                    self.flickrItemArray.append(value)
                     self.collectionView.reloadData()
                 }
-            } else {
-                print("Error: \(String(describing: error))")
-            }
+                
+                //                for url in URLs{
+                //                    if let validURL = url {
+                //                        let item = FlickrItem(url: validURL)
+                //                        self.flickrItemArray.append(item)
+                //                    }
+                
+        } else {
+            print("Error: \(String(describing: error))")
         }
     }
-    
+}
+//    func fetchImages() {
+//        QueryService.getPhotoDictionary(flickrItemArray.count) { [weak self] (urls, error) in
+//            guard let self = self else {return}
+//
+//            if error == nil {
+//                guard let URLs = urls else { return }
+//
+//                for url in URLs{
+//                    if let validURL = url {
+//                        let item = FlickrItem(url: QueryService.getURL(validURL,.large1024))
+//                        self.flickrItemArray.append(item)
+//                    }
+//                    self.collectionView.reloadData()
+//                }
+//            } else {
+//                print("Error: \(String(describing: error))")
+//            }
+//        }
+//    }
+//
 
 
-    // MARK: - UICollectionViewDataSource
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return flickrItemArray.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("init \(indexPath.row)")
-        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
-                                                          for: indexPath) as? NearbyPhotoCell{
-            self.flickrItemArray[indexPath.row].getPhoto {(data) -> () in
-                cell.update(data)
-            }
-            return cell
+// MARK: - UICollectionViewDataSource
+override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return flickrItemArray.count
+}
+
+override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    print("init \(indexPath.row)")
+    if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
+                                                      for: indexPath) as? NearbyPhotoCell{
+        self.flickrItemArray[indexPath.row].getPhoto {(data) -> () in
+            cell.update(data)
         }
-        return UICollectionViewCell()
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row >= flickrItemArray.count - 1  {
-            fetchImages()
-        }
-    }
-    
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if flickrItemArray[indexPath.row].haveData() {
-            performSegue(withIdentifier: "DetailNearblyPhotoSegue", sender: indexPath)
-        }
-    }
-    
-    // MARK: UICollectionViewDelegate
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = UIScreen.main.bounds.width / 3
-        return CGSize(width: width - 1, height: width - 1)
-    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return CGFloat(1)
         
+        return cell
     }
-    // MARK: - Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       if  segue.identifier == "DetailNearblyPhotoSegue" {
-           if let conroller = segue.destination as? DetailViewController {
-               if let indexPath = sender as? IndexPath {
-//                 flickrItemArray[indexPath.row].getPhoto({ (data) in
-//                    conroller.image = data
-//                })
-                conroller.image = flickrItemArray[indexPath.row]
-               }
-           }
-       }
+    return UICollectionViewCell()
+}
+
+override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    if indexPath.row >= flickrItemArray.count - 1  {
+        fetchImages()
     }
+}
+
+
+override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    if flickrItemArray[indexPath.row].haveSmallData() {
+        performSegue(withIdentifier: "DetailNearblyPhotoSegue", sender: indexPath)
+    }
+}
+
+// MARK: UICollectionViewDelegate
+
+func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    let width = UIScreen.main.bounds.width / 3
+    return CGSize(width: width - 1, height: width - 1)
+}
+func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    return CGFloat(1)
     
 }
+// MARK: - Navigation
+
+override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if  segue.identifier == "DetailNearblyPhotoSegue" {
+        if let conroller = segue.destination as? DetailViewController {
+            if let indexPath = sender as? IndexPath {
+                conroller.itemImage = flickrItemArray[indexPath.row]
+                }
+            }
+        }
+    }
+}
+
+
 
 
 /*

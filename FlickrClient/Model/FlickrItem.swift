@@ -8,12 +8,17 @@
 import Foundation
 
 class FlickrItem {
-    var URL: URL
+    
+    // TODO - Об'єднати GetPhoto i GetFullViewPhoto
+    private var photoURL: URL
     private var photoData: Data?
+    
+    private var fullViewPhotoURL: URL
     private var fullViewPhotoData: Data?
     
-    init(url: URL) {
-        URL = url
+    init(photoURL: URL, fullViewPhotoURL: URL) {
+        self.photoURL = photoURL
+        self.fullViewPhotoURL = fullViewPhotoURL
     }
     
     public func getPhoto(_ completion: @escaping(_ data: Data?) -> ()) {
@@ -28,7 +33,7 @@ class FlickrItem {
         completion(nil)
         //Завантажуємо дані
         DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: self.URL) {
+            if let data = try? Data(contentsOf: self.photoURL) {
                 DispatchQueue.main.async {
                     self.photoData = data
                     print("NEW")
@@ -49,7 +54,7 @@ class FlickrItem {
         completion(nil)
         //Завантажуємо дані
         DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: self.URL) {
+            if let data = try? Data(contentsOf: self.fullViewPhotoURL) {
                 DispatchQueue.main.async {
                     self.fullViewPhotoData = data
                     print("NEW")
@@ -59,7 +64,7 @@ class FlickrItem {
         }
     }
     
-    public func haveData() -> Bool {
+    public func haveSmallData() -> Bool {
         if photoData == nil {
             return false
         }
