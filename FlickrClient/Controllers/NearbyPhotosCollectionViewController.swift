@@ -33,10 +33,9 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
     }
     func fetchImages() {
         guard let location = curentLocation else {return}
-        QueryService.getURLsOfItems(flickrItemArray.count, location) { [weak self] (items, error) in
+        QueryService.getURLsOfItems(flickrItemArray.count, .userLocation(location)) { [weak self] (items, error) in
             guard let self = self else {return}
-            
-            if error == nil {
+            if items != nil || error == nil {
                 guard let items = items else { return }
                 for oneItem in items {
                     guard let value = oneItem else { return }
@@ -56,8 +55,8 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         print("init \(indexPath.row)")
-        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
-                                                          for: indexPath) as? NearbyPhotoCell{
+        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? NearbyPhotoCell{
+            cell.imageView.image = UIImage()
             self.flickrItemArray[indexPath.row].getPhoto {(data) -> () in
                 cell.update(data)
             }

@@ -12,8 +12,17 @@ class PhotoSearchCell: UICollectionViewCell {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var label: UILabel!
     
-    public func update(_ data: Data?) {
+    func clearImage() {
+        imageView.image = UIImage()
+    }
+    
+    func setData(_ item: FlickrItem)  {
+        //get foto
+    }
+    public func update(_ data: Data?,_ indexPath: IndexPath) {
+        label.text = String(indexPath.row)
         if let data = data {
             activityIndicator.stopAnimating()
             activityIndicator.isHidden = true

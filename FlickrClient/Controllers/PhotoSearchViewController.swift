@@ -41,10 +41,10 @@ class PhotoSearchViewController: UIViewController  {
     }
     
     func fetchImages() {
-        QueryService.getURLsOfItems(flickrItemArray.count, searchText) { [weak self] (items, error) in
+        QueryService.getURLsOfItems(flickrItemArray.count, .searchText(searchText)) { [weak self] (items, error) in
             guard let self = self else {return}
             
-            if error == nil {
+            if items != nil || error == nil {
                 guard let items = items else { return }
                 for oneItem in items {
                     guard let value = oneItem else { return }
@@ -86,17 +86,24 @@ extension PhotoSearchViewController: UICollectionViewDelegate, UICollectionViewD
         return flickrItemArray.count
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         print("init \(indexPath.row)")
-        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
-                                                          for: indexPath) as? PhotoSearchCell{
-            self.flickrItemArray[indexPath.row].getPhoto {(data) -> () in
-                cell.update(data)
-            }
-            
+        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? PhotoSearchCell {
+//            cell.clearImage()
+//            self.flickrItemArray[indexPath.row].getPhoto {(data) -> () in
+//                if let data = data {
+//                    cell.clearImage()
+//                    cell.update(data, indexPath)
+//                } else {
+//                }
+//            }
+            cell.setData(flickrItemArray[indexPath.row])
             return cell
+        } else {
+            return UICollectionViewCell()
         }
-        return UICollectionViewCell()
+        //return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

@@ -18,12 +18,12 @@ class NearbyPhotoCell: UICollectionViewCell {
         if let data = data {
             activityIndicator.stopAnimating()
             activityIndicator.isHidden = true
-            imageView.isHidden = false
             imageView.image = UIImage(data: data)
         } else {
-            imageView.isHidden = true
+            imageView.image = UIImage()
             activityIndicator.isHidden = false
             activityIndicator.startAnimating()
+            
         }
     }
 }

@@ -27,6 +27,7 @@ class DetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabBarController?.tabBar.isHidden = true
         scrollViewSettings()
         fetchImage()
     }
@@ -39,6 +40,7 @@ class DetailViewController: UIViewController {
     
     func fetchImage() {
         activityIndicator.startAnimating()
+        print(itemImage?.photoURL as Any)
         itemImage?.getPhoto({ (data) in
             if let data = data {
                 self.imageView.image = UIImage(data: data)
