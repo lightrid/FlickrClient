@@ -13,9 +13,9 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
     
     private var flickrItemArray = [FlickrItemCollection]()
     private let reuseIdentifier = "NearbyPhotoCell"
-    private var locationManager =  CLLocationManager()
-    private var curentLocation: CLLocation!
     
+    private var locationManager = CLLocationManager()
+    private var curentLocation: CLLocation!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,13 +35,14 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
         guard let location = curentLocation else {return}
         QueryService.getURLsOfItems(flickrItemArray.count, .userLocation(location)) { [weak self] (items, error) in
             guard let self = self else {return}
-            if items != nil || error == nil {
+            
+            if items != nil && error == nil {
                 guard let items = items else { return }
                 for oneItem in items {
                     guard let value = oneItem else { return }
                     self.flickrItemArray.append(value)
-                    self.collectionView.reloadData()
                 }
+                self.collectionView.reloadData()
             } else {
                 print("Error: \(String(describing: error))")
             }
@@ -54,20 +55,16 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("init \(indexPath.row)")
-        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? NearbyPhotoCell{
-            cell.imageView.image = UIImage()
-            self.flickrItemArray[indexPath.row].smallPhoto.getPhoto {(data) -> () in
-                cell.update(data)
-            }
-            
-            return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        
+        if let cell = cell as? NearbyPhotoCell{
+            cell.setData(flickrItemArray[indexPath.row])
         }
-        return UICollectionViewCell()
+            return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row >= flickrItemArray.count - 1  {
+        if indexPath.row == flickrItemArray.count - 1  {
             fetchImages()
         }
     }
@@ -111,6 +108,5 @@ extension NearbyPhotosCollectionViewController: CLLocationManagerDelegate {
         } else {
             curentLocation = nil
         }
-        
     }
 }

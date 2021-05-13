@@ -13,7 +13,6 @@ struct FlickrItemCollection {
 }
 
 class FlickrItem {
-    
     private var photoURL: URL
     private var photoData: Data?
     
@@ -24,8 +23,11 @@ class FlickrItem {
     public func haveData() -> Bool {
         return photoData != nil
     }
-    // TODO - Інколи URL є биті, потрібно ігнорувати їх. Скоріш за все потрібо cath блок до 36 рядка і видалити об'єкт з масиву.
-    public func getPhoto(_ completion: @escaping(_ data: Data?) -> ()) { //
+   
+    public func getPhoto(_ completion: ((_ data: Data?) -> Void)?) { //
+        guard let completion = completion else  {
+            return
+        }
         // Якщо маємо значення то повертаємо його одразу і перериваємо
         if let data = photoData {
             completion(data)
@@ -43,5 +45,5 @@ class FlickrItem {
             }
         }
     }
-//    Засунути в флікр айтем колектіон
 }
+

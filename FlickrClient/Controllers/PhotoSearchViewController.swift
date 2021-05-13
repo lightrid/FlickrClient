@@ -13,7 +13,7 @@ class PhotoSearchViewController: UIViewController  {
     
     private var flickrItemArray = [FlickrItemCollection]()
     private var searchText = String()
-    
+   
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -44,13 +44,13 @@ class PhotoSearchViewController: UIViewController  {
         QueryService.getURLsOfItems(flickrItemArray.count, .searchText(searchText)) { [weak self] (items, error) in
             guard let self = self else {return}
             
-            if items != nil || error == nil {
+            if items != nil && error == nil {
                 guard let items = items else { return }
                 for oneItem in items {
                     guard let value = oneItem else { return }
                     self.flickrItemArray.append(value)
-                    self.collectionView.reloadData()
                 }
+                self.collectionView.reloadData()
             } else {
                 print("Error: \(String(describing: error))")
             }
@@ -86,27 +86,17 @@ extension PhotoSearchViewController: UICollectionViewDelegate, UICollectionViewD
         return flickrItemArray.count
     }
     
-    
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("init \(indexPath.row)")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let cell = cell as? PhotoSearchCell {
-            cell.setData(flickrItemArray[indexPath.row])
-            
+            cell.tag = indexPath.row
+            cell.setData(flickrItemArray[indexPath.row], indexPath)
         }
         return cell
-        //return UICollectionViewCell()
-    }
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? PhotoSearchCell {
-            cell.cancelCompletion()
-            cell.displayData(.none)
-        }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row >= flickrItemArray.count - 1  {
+        if indexPath.row == flickrItemArray.count - 1  {
             fetchImages()
         }
     }
