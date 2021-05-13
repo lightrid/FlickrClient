@@ -7,8 +7,3 @@
 
 import Foundation
 
-struct FlickrItemCollection {
-    var smallPhoto: FlickrItem
-    var largePhoto: FlickrItem
-    
-}

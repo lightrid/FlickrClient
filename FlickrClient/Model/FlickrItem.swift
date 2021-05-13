@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct FlickrItemCollection {
+    var smallPhoto: FlickrItem
+    var largePhoto: FlickrItem
+}
+
 class FlickrItem {
     
     private var photoURL: URL
@@ -16,11 +21,8 @@ class FlickrItem {
         self.photoURL = photoURL
     }
     
-    public func haveSmallData() -> Bool {
-        if photoData == nil {
-            return false
-        }
-        return true
+    public func haveData() -> Bool {
+        return photoData != nil
     }
     // TODO - Інколи URL є биті, потрібно ігнорувати їх. Скоріш за все потрібо cath блок до 36 рядка і видалити об'єкт з масиву.
     public func getPhoto(_ completion: @escaping(_ data: Data?) -> ()) { //

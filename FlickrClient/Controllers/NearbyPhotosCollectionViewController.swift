@@ -11,7 +11,7 @@ import CoreLocation
 
 class NearbyPhotosCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
-    private var flickrItemArray = [FlickrItem]()
+    private var flickrItemArray = [FlickrItemCollection]()
     private let reuseIdentifier = "NearbyPhotoCell"
     private var locationManager =  CLLocationManager()
     private var curentLocation: CLLocation!
@@ -57,7 +57,7 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
         print("init \(indexPath.row)")
         if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? NearbyPhotoCell{
             cell.imageView.image = UIImage()
-            self.flickrItemArray[indexPath.row].getPhoto {(data) -> () in
+            self.flickrItemArray[indexPath.row].smallPhoto.getPhoto {(data) -> () in
                 cell.update(data)
             }
             
@@ -74,7 +74,7 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
     
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if flickrItemArray[indexPath.row].haveSmallData() {
+        if flickrItemArray[indexPath.row].smallPhoto.haveData() {
             performSegue(withIdentifier: "DetailNearblyPhotoSegue", sender: indexPath)
         }
     }

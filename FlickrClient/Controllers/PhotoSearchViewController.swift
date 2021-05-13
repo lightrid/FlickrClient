@@ -11,7 +11,7 @@ class PhotoSearchViewController: UIViewController  {
     
     private let reuseIdentifier = "PhotoSearchCell"
     
-    private var flickrItemArray = [FlickrItem]()
+    private var flickrItemArray = [FlickrItemCollection]()
     private var searchText = String()
     
     @IBOutlet weak var searchBar: UISearchBar!
@@ -36,7 +36,7 @@ class PhotoSearchViewController: UIViewController  {
         searchBar.endEditing(true)
     }
     func clearData() {
-        flickrItemArray = [FlickrItem]()
+        flickrItemArray = [FlickrItemCollection]()
         collectionView.reloadData()
     }
     
@@ -87,23 +87,22 @@ extension PhotoSearchViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         print("init \(indexPath.row)")
-        if  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? PhotoSearchCell {
-//            cell.clearImage()
-//            self.flickrItemArray[indexPath.row].getPhoto {(data) -> () in
-//                if let data = data {
-//                    cell.clearImage()
-//                    cell.update(data, indexPath)
-//                } else {
-//                }
-//            }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        if let cell = cell as? PhotoSearchCell {
             cell.setData(flickrItemArray[indexPath.row])
-            return cell
-        } else {
-            return UICollectionViewCell()
+            
         }
+        return cell
         //return UICollectionViewCell()
+    }
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? PhotoSearchCell {
+            cell.cancelCompletion()
+            cell.displayData(.none)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -113,7 +112,7 @@ extension PhotoSearchViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if flickrItemArray[indexPath.row].haveSmallData() {
+        if flickrItemArray[indexPath.row].smallPhoto.haveData() {
             performSegue(withIdentifier: "DetailPhotoSearchSegue", sender: indexPath)
         }
     }

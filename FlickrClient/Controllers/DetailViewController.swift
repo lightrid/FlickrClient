@@ -16,7 +16,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var scrollView: UIScrollView!
 
-    var itemImage: FlickrItem?
+    var itemImage: FlickrItemCollection?
     var currentImage: UIImage?
     
     lazy var doubleTapRecognizer: UITapGestureRecognizer = {
@@ -40,14 +40,14 @@ class DetailViewController: UIViewController {
     
     func fetchImage() {
         activityIndicator.startAnimating()
-        print(itemImage?.photoURL as Any)
-        itemImage?.getPhoto({ (data) in
+    
+        itemImage?.smallPhoto.getPhoto({ (data) in
             if let data = data {
                 self.imageView.image = UIImage(data: data)
             }
         })
         
-        itemImage?.getFullViewPhoto({ (data) in
+        itemImage?.largePhoto.getPhoto({ (data) in
             if let data = data {
                 self.currentImage = UIImage(data: data)
                 self.activityIndicator.stopAnimating()
