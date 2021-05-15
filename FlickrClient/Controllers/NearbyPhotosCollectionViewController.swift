@@ -11,6 +11,7 @@ import CoreLocation
 
 class NearbyPhotosCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
+    private var downloadedPages = 1
     private var flickrItemArray = [FlickrItemCollection]()
     private let reuseIdentifier = "NearbyPhotoCell"
     
@@ -33,11 +34,12 @@ class NearbyPhotosCollectionViewController: UICollectionViewController, UICollec
     }
     func fetchImages() {
         guard let location = curentLocation else {return}
-        QueryService.getURLsOfItems(flickrItemArray.count, .userLocation(location)) { [weak self] (items, error) in
+        QueryService.getURLsOfItems(downloadedPages, .userLocation(location)) { [weak self] (items, error) in
             guard let self = self else {return}
             
             if items != nil && error == nil {
                 guard let items = items else { return }
+                self.downloadedPages += 1
                 for oneItem in items {
                     guard let value = oneItem else { return }
                     self.flickrItemArray.append(value)

@@ -11,6 +11,7 @@ class PhotoSearchViewController: UIViewController  {
     
     private let reuseIdentifier = "PhotoSearchCell"
     
+    private var downloadedPages = 1
     private var flickrItemArray = [FlickrItemCollection]()
     private var searchText = String()
    
@@ -37,15 +38,17 @@ class PhotoSearchViewController: UIViewController  {
     }
     func clearData() {
         flickrItemArray = [FlickrItemCollection]()
+        downloadedPages = 1
         collectionView.reloadData()
     }
     
     func fetchImages() {
-        QueryService.getURLsOfItems(flickrItemArray.count, .searchText(searchText)) { [weak self] (items, error) in
+        QueryService.getURLsOfItems(downloadedPages, .searchText(searchText)) { [weak self] (items, error) in
             guard let self = self else {return}
             
             if items != nil && error == nil {
                 guard let items = items else { return }
+                self.downloadedPages += 1
                 for oneItem in items {
                     guard let value = oneItem else { return }
                     self.flickrItemArray.append(value)
