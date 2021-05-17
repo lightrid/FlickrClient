@@ -19,11 +19,9 @@ class NearbyPhotosViewController: FlickrCollectionViewController {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         checkLocation()
-        
     }
     
     func checkLocation() {
-        curentLocation = locationManager.location
         guard let location = curentLocation else {return}
         query = .userLocation(location)
         fetchImages(query)
@@ -36,7 +34,7 @@ extension NearbyPhotosViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways || status == .authorizedWhenInUse {
             curentLocation = manager.location
-            fetchImages(query)
+            checkLocation()
         } else {
             curentLocation = nil
         }
