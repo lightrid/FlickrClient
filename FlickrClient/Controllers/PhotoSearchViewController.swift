@@ -7,116 +7,40 @@
 
 import UIKit
 
-class PhotoSearchViewController: UIViewController  {
+class PhotoSearchViewController: FlickrCollectionViewController  {
     
-    private let reuseIdentifier = "PhotoSearchCell"
-    
-    private var downloadedPages = 1
-    private var flickrItemArray = [FlickrItemCollection]()
     private var searchText = String()
-   
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var collectionView: UICollectionView!
-    
-    lazy var tapRecognizer: UITapGestureRecognizer = {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(hideKeybord(_:)))
-        tap.cancelsTouchesInView = false
-        return tap
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        searchBar.delegate = self
-        
-        collectionView.addGestureRecognizer(tapRecognizer)
-        collectionView.keyboardDismissMode = .onDrag
     }
-    @objc func hideKeybord(_ recognizer: UITapGestureRecognizer) {
-        searchBar.endEditing(true)
-    }
+    
     func clearData() {
         flickrItemArray = [FlickrItemCollection]()
         downloadedPages = 1
         collectionView.reloadData()
     }
-    
-    func fetchImages() {
-        QueryService.getURLsOfItems(downloadedPages, .searchText(searchText)) { [weak self] (items, error) in
-            guard let self = self else {return}
-            
-            if items != nil && error == nil {
-                guard let items = items else { return }
-                self.downloadedPages += 1
-                for oneItem in items {
-                    guard let value = oneItem else { return }
-                    self.flickrItemArray.append(value)
-                }
-                self.collectionView.reloadData()
-            } else {
-                print("Error: \(String(describing: error))")
-            }
-        }
-    }
-    
-    // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if  segue.identifier == "DetailPhotoSearchSegue" {
-            if let conroller = segue.destination as? DetailViewController {
-                if let indexPath = sender as? IndexPath {
-                    conroller.itemImage = flickrItemArray[indexPath.row]
-                }
-            }
-        }
-    }
-    
 }
 extension PhotoSearchViewController: UISearchBarDelegate {
-    // MARK: - UISearchBarDelegate
+    
+    // MARK:    - UISearchBarDelegate
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
             self.searchText = searchText
+            query = .searchText(searchText)
             clearData()
-            fetchImages()
+            fetchImages(query)
             searchBar.endEditing(true)
         }
     }
-}
-extension PhotoSearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    // MARK: - UICollectionViewDataSource
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return flickrItemArray.count
-    }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-        if let cell = cell as? PhotoSearchCell {
-            cell.tag = indexPath.row
-            cell.setData(flickrItemArray[indexPath.row], indexPath)
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let searchView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SearchBarHeader", for: indexPath)
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.sectionHeadersPinToVisibleBounds = true
         }
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == flickrItemArray.count - 1  {
-            fetchImages()
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if flickrItemArray[indexPath.row].smallPhoto.haveData() {
-            performSegue(withIdentifier: "DetailPhotoSearchSegue", sender: indexPath)
-        }
-    }
-    
-    // MARK: - UICollectionViewDelegate
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = UIScreen.main.bounds.width / 3
-        return CGSize(width: width - 1, height: width - 1)
-    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return CGFloat(1)
-        
+        searchView.becomeFirstResponder()
+        return searchView
     }
 }
+
