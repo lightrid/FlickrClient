@@ -7,11 +7,7 @@
 import UIKit
 
 class DetailViewController: UIViewController {
-    
-//    TODO: Зум в конкретну точку.
-//    Межі зображення при зумі
-
-    
+        
     @IBOutlet var imageView: UIImageView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var scrollView: UIScrollView!

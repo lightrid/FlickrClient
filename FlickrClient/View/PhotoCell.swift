@@ -8,10 +8,10 @@
 import Foundation
 import UIKit
 
-class PhotoSearchCell: UICollectionViewCell {
+class PhotoCell: UICollectionViewCell {
 
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView! 
 
     private var completion: ((Data?)-> Void)?
     

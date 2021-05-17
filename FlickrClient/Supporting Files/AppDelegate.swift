@@ -11,8 +11,6 @@ import FlickrKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         let apiKey = "6aa8d3297b88d1547ceafdb9f6dce03a"

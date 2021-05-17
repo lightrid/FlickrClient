@@ -19,7 +19,7 @@ struct QueryService {
         var photoItems = [FlickrItemCollection?]()
         
         let flickrSearchParameters = FKFlickrPhotosSearch()
-        flickrSearchParameters.per_page = "100"
+        flickrSearchParameters.per_page = "99"
  
         switch query {
         case .userLocation(let userLocation):
