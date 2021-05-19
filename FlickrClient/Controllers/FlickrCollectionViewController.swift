@@ -24,33 +24,45 @@ class FlickrCollectionViewController: UICollectionViewController {
     }
     
     func fetchImages(_ queryType: QueryType?) {
-        guard let queryType = queryType else {return}
+        guard let queryType = queryType else {
+            return
+        }
         QueryService.getURLsOfItems(downloadedPages, queryType) { [weak self] (items, error) in
-            guard let self = self else {return}
+            guard let self = self else {
+                return
+            }
             
-            if items != nil && error == nil {
-                guard let items = items else { return }
-                self.downloadedPages += 1
-                for oneItem in items {
-                    guard let value = oneItem else { return }
+            guard error == nil else {
+                print("Error: \(String(describing: error))")
+                return
+            }
+            
+            guard let items = items else {
+                return
+            }
+            
+            for item in items {
+                if let value = item {
                     self.flickrItemArray.append(value)
                 }
-                self.collectionView.reloadData()
-            } else {
-                print("Error: \(String(describing: error))")
             }
+            self.downloadedPages += 1
+            self.collectionView.reloadData()
         }
     }
+    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if  segue.identifier == detailViewSegue {
             if let conroller = segue.destination as? DetailViewController {
+                conroller.hidesBottomBarWhenPushed = true
                 if let indexPath = sender as? IndexPath {
                     conroller.itemImage = flickrItemArray[indexPath.row]
                 }
             }
         }
     }
+    
 }
 
 extension FlickrCollectionViewController: UICollectionViewDelegateFlowLayout {
@@ -89,6 +101,6 @@ extension FlickrCollectionViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return CGFloat(1)
-        
     }
+    
 }

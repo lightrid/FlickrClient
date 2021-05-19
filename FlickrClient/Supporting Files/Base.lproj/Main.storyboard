@@ -13,16 +13,16 @@
         <!--Detail View Controller-->
         <scene sceneID="G0e-nK-fFX">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="C7l-2y-mfv" customClass="DetailViewController" customModule="FlickrClient" sceneMemberID="viewController">
+                <viewController id="C7l-2y-mfv" customClass="DetailViewController" customModule="FlickrClient" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PKq-Ds-QEH">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sXh-AS-vAX">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xaR-Zs-UAQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                                         <gestureRecognizers/>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="qvY-3t-rON" appends="YES" id="Qcq-WH-V4F"/>
@@ -30,26 +30,26 @@
                                     </imageView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Tiu-by-Mxe" firstAttribute="bottom" secondItem="xaR-Zs-UAQ" secondAttribute="bottom" id="3Xt-BL-7Q2"/>
-                                    <constraint firstAttribute="bottom" secondItem="xaR-Zs-UAQ" secondAttribute="bottom" id="DTU-Yt-IGa"/>
-                                    <constraint firstItem="xaR-Zs-UAQ" firstAttribute="top" secondItem="sXh-AS-vAX" secondAttribute="top" id="M40-MF-ARD"/>
-                                    <constraint firstItem="xaR-Zs-UAQ" firstAttribute="leading" secondItem="Tiu-by-Mxe" secondAttribute="leading" id="gWR-33-YIc"/>
-                                    <constraint firstAttribute="trailing" secondItem="xaR-Zs-UAQ" secondAttribute="trailing" id="m38-ar-wTF"/>
-                                    <constraint firstItem="Tiu-by-Mxe" firstAttribute="trailing" secondItem="xaR-Zs-UAQ" secondAttribute="trailing" id="vvE-22-f2Y"/>
+                                    <constraint firstItem="xaR-Zs-UAQ" firstAttribute="top" secondItem="sXh-AS-vAX" secondAttribute="top" id="4gg-gT-qGE"/>
+                                    <constraint firstItem="xaR-Zs-UAQ" firstAttribute="leading" secondItem="Tiu-by-Mxe" secondAttribute="leading" id="Q8i-kU-LZb"/>
+                                    <constraint firstItem="xaR-Zs-UAQ" firstAttribute="centerX" secondItem="sXh-AS-vAX" secondAttribute="centerX" id="ToH-2F-ysu"/>
+                                    <constraint firstAttribute="trailing" secondItem="xaR-Zs-UAQ" secondAttribute="trailing" id="WYD-dg-Mg8"/>
+                                    <constraint firstAttribute="bottom" secondItem="xaR-Zs-UAQ" secondAttribute="bottom" id="pk9-sf-Umo"/>
+                                    <constraint firstItem="xaR-Zs-UAQ" firstAttribute="centerY" secondItem="sXh-AS-vAX" secondAttribute="centerY" id="qFr-KA-hZb"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="O9g-1S-ST2"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="Tiu-by-Mxe"/>
                             </scrollView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="AlR-go-nPA">
-                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                                <rect key="frame" x="188.5" y="452" width="37" height="37"/>
                             </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="UNe-lz-bFl"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="sXh-AS-vAX" firstAttribute="top" secondItem="UNe-lz-bFl" secondAttribute="top" id="137-8Z-1ax"/>
-                            <constraint firstItem="sXh-AS-vAX" firstAttribute="centerX" secondItem="AlR-go-nPA" secondAttribute="centerX" id="BfJ-aA-t28"/>
-                            <constraint firstItem="AlR-go-nPA" firstAttribute="centerY" secondItem="PKq-Ds-QEH" secondAttribute="centerY" id="FFa-83-mAx"/>
+                            <constraint firstItem="UNe-lz-bFl" firstAttribute="centerX" secondItem="AlR-go-nPA" secondAttribute="centerX" id="BfJ-aA-t28"/>
+                            <constraint firstItem="AlR-go-nPA" firstAttribute="centerY" secondItem="UNe-lz-bFl" secondAttribute="centerY" constant="20" id="FFa-83-mAx"/>
                             <constraint firstAttribute="bottomMargin" secondItem="sXh-AS-vAX" secondAttribute="bottom" id="Q0c-NK-oRI"/>
                             <constraint firstItem="sXh-AS-vAX" firstAttribute="leading" secondItem="PKq-Ds-QEH" secondAttribute="leading" id="Rpw-In-OMX"/>
                             <constraint firstAttribute="trailing" secondItem="sXh-AS-vAX" secondAttribute="trailing" id="aDO-eA-Vyf"/>
@@ -271,7 +271,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="yl5-8f-Ncz"/>
+        <segue reference="vj7-nz-zBm"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="location.fill" catalog="system" width="128" height="121"/>

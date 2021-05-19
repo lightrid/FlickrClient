@@ -7,9 +7,14 @@
 
 import Foundation
 
-struct FlickrItemCollection {
+class FlickrItemCollection {
     var smallPhoto: FlickrItem
     var largePhoto: FlickrItem
+    
+    init(smallPhoto: FlickrItem, largePhoto: FlickrItem) {
+        self.smallPhoto = smallPhoto
+        self.largePhoto = largePhoto
+    }
 }
 
 class FlickrItem {

@@ -15,12 +15,12 @@ enum QueryType {
 }
 
 struct QueryService {
+    
     static func getURLsOfItems(_ currentPage: Int, _ query: QueryType, completionHandler: @escaping (_ photoItems: [FlickrItemCollection?]?, _ error: NSError?) -> ()) {
-        var photoItems = [FlickrItemCollection?]()
         
+        var photoItems = [FlickrItemCollection?]()
         let flickrSearchParameters = FKFlickrPhotosSearch()
-        flickrSearchParameters.per_page = "99"
- 
+        
         switch query {
         case .userLocation(let userLocation):
             flickrSearchParameters.lat = String(userLocation.coordinate.latitude)
@@ -30,35 +30,27 @@ struct QueryService {
             flickrSearchParameters.text = searchText
         }
         
+        flickrSearchParameters.per_page = "99"
         flickrSearchParameters.page = String(currentPage)
-        print(flickrSearchParameters.page!)
+        
         FlickrKit.shared().call(flickrSearchParameters) { (response, error) -> Void in
             DispatchQueue.main.async {
-                if let response = response, let photoArray = FlickrKit.shared().photoArray(fromResponse: response) {
-                    if !photoArray.isEmpty {
-                        for photoDictionary in photoArray {
-                            let smallPhoto = FlickrItem(photoURL: FlickrKit.shared().photoURL(for: .small320, fromPhotoDictionary: photoDictionary))
-                            let largePhoto = FlickrItem(photoURL: FlickrKit.shared().photoURL(for: .large1024, fromPhotoDictionary: photoDictionary))
-                            let photoCollection = FlickrItemCollection(smallPhoto: smallPhoto, largePhoto: largePhoto)
-                            photoItems.append(photoCollection)
-                        }
-                        completionHandler(photoItems, nil)
-                    } else {
-                        completionHandler(nil, nil)
-                    }
-                } else {
+                guard let photos = response.flatMap({FlickrKit.shared().photoArray(fromResponse: $0)}), !photos.isEmpty else {
                     if let error = error as NSError? {
-                        
-                        switch error.code {
-                        case FKFlickrInterestingnessGetListError.serviceCurrentlyUnavailable.rawValue:
-                            break;
-                        default:
-                            break;
-                        }
-                        completionHandler(nil,error)
+                        completionHandler(nil, error)
                     }
+                    return
                 }
+    
+                for photoDictionary in photos {
+                    let smallPhoto = FlickrItem(photoURL: FlickrKit.shared().photoURL(for: .small320, fromPhotoDictionary: photoDictionary))
+                    let largePhoto = FlickrItem(photoURL: FlickrKit.shared().photoURL(for: .large1024, fromPhotoDictionary: photoDictionary))
+                    let photoCollection = FlickrItemCollection(smallPhoto: smallPhoto, largePhoto: largePhoto)
+                    photoItems.append(photoCollection)
+                }
+                completionHandler(photoItems, nil)
             }
         }
     }
+    
 }

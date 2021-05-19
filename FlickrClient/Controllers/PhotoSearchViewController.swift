@@ -11,18 +11,32 @@ class PhotoSearchViewController: FlickrCollectionViewController  {
     
     private var searchText = String()
     
+    lazy var tapRecognizer: UITapGestureRecognizer = {
+            let tap = UITapGestureRecognizer(target: self, action: #selector(hideKeybord(_:)))
+            tap.cancelsTouchesInView = false
+            return tap
+        }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.addGestureRecognizer(tapRecognizer)
+        collectionView.keyboardDismissMode = .onDrag
     }
+    
+    @objc func hideKeybord(_ recognizer: UITapGestureRecognizer) {
+        view.endEditing(true)
+        }
     
     func clearData() {
         flickrItemArray = [FlickrItemCollection]()
         downloadedPages = 1
         collectionView.reloadData()
     }
-}
-extension PhotoSearchViewController: UISearchBarDelegate {
     
+}
+
+extension PhotoSearchViewController: UISearchBarDelegate {
+   
     // MARK:    - UISearchBarDelegate
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
@@ -42,5 +56,6 @@ extension PhotoSearchViewController: UISearchBarDelegate {
         searchView.becomeFirstResponder()
         return searchView
     }
+    
 }
 
