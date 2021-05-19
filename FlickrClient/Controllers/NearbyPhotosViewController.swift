@@ -26,6 +26,7 @@ class NearbyPhotosViewController: FlickrCollectionViewController {
         query = .userLocation(location)
         fetchImages(query)
     }
+    
 }
 
 extension NearbyPhotosViewController: CLLocationManagerDelegate {
@@ -39,4 +40,5 @@ extension NearbyPhotosViewController: CLLocationManagerDelegate {
             curentLocation = nil
         }
     }
+    
 }
