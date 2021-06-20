@@ -78,13 +78,10 @@ class DetailViewController: UIViewController {
                 scrollView.setZoomScale(1, animated: true)
             }
     }
-    
 }
 
 extension DetailViewController: UIScrollViewDelegate {
-    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.imageView
     }
-    
 }

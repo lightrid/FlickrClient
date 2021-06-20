@@ -15,9 +15,7 @@ enum QueryType {
 }
 
 struct QueryService {
-    
     static func getURLsOfItems(_ currentPage: Int, _ query: QueryType, completionHandler: @escaping (_ photoItems: [FlickrItemCollection?]?, _ error: NSError?) -> ()) {
-        
         var photoItems = [FlickrItemCollection?]()
         let flickrSearchParameters = FKFlickrPhotosSearch()
         
@@ -35,13 +33,15 @@ struct QueryService {
         
         FlickrKit.shared().call(flickrSearchParameters) { (response, error) -> Void in
             DispatchQueue.main.async {
-                guard let photos = response.flatMap({FlickrKit.shared().photoArray(fromResponse: $0)}), !photos.isEmpty else {
+                guard let photos = response.flatMap({FlickrKit.shared().photoArray(fromResponse: $0)}),
+                    !photos.isEmpty else {
+                    
                     if let error = error as NSError? {
                         completionHandler(nil, error)
                     }
                     return
                 }
-    
+                
                 for photoDictionary in photos {
                     let smallPhoto = FlickrItem(photoURL: FlickrKit.shared().photoURL(for: .small320, fromPhotoDictionary: photoDictionary))
                     let largePhoto = FlickrItem(photoURL: FlickrKit.shared().photoURL(for: .large1024, fromPhotoDictionary: photoDictionary))
@@ -52,5 +52,4 @@ struct QueryService {
             }
         }
     }
-    
 }

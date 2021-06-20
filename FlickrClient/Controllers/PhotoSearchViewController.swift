@@ -36,8 +36,6 @@ class PhotoSearchViewController: FlickrCollectionViewController  {
 }
 
 extension PhotoSearchViewController: UISearchBarDelegate {
-   
-    // MARK:    - UISearchBarDelegate
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
             self.searchText = searchText
@@ -56,6 +54,5 @@ extension PhotoSearchViewController: UISearchBarDelegate {
         searchView.becomeFirstResponder()
         return searchView
     }
-    
 }
 

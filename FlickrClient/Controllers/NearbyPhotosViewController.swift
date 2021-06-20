@@ -30,8 +30,6 @@ class NearbyPhotosViewController: FlickrCollectionViewController {
 }
 
 extension NearbyPhotosViewController: CLLocationManagerDelegate {
-    
-    //  MARK: - LocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways || status == .authorizedWhenInUse {
             curentLocation = manager.location

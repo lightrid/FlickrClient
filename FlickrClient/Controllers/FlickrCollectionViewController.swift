@@ -16,7 +16,6 @@ class FlickrCollectionViewController: UICollectionViewController {
     var flickrItemArray = [FlickrItemCollection]()
     var query: QueryType?
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
@@ -51,7 +50,6 @@ class FlickrCollectionViewController: UICollectionViewController {
         }
     }
     
-    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if  segue.identifier == detailViewSegue {
             if let conroller = segue.destination as? DetailViewController {
@@ -62,12 +60,9 @@ class FlickrCollectionViewController: UICollectionViewController {
             }
         }
     }
-    
 }
 
 extension FlickrCollectionViewController: UICollectionViewDelegateFlowLayout {
-    
-    // MARK: - UICollectionViewDataSource
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return flickrItemArray.count
     }
@@ -102,5 +97,4 @@ extension FlickrCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return CGFloat(1)
     }
-    
 }
